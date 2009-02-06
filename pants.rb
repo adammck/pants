@@ -18,7 +18,8 @@ class Pants
 			@tmpl = TMPL
 
 		else
-			raise ArgumentError
+			puts "Usage: pants.rb FEED [TEMPLATE]"
+			exit 1
 		end
 	end
 
