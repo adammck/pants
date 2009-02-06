@@ -47,6 +47,7 @@ end
 
 Pants::TMPL = <<EOT
 <div class="feed">
+	<h2><%= @data.channel.title %></h2>
 	<ul><% @data.items.each do |item| %>
 		<li>
 			<h3><a href="<%= item.link %>"><%= item.title %></a></h3>
