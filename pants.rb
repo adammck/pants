@@ -10,7 +10,7 @@ require "erb"
 class Pants
 	def initialize(args, stdin)
 		if args.length == 2
-			@tmpl = File.get_contents(args[1])
+			@tmpl = IO.read(args[1])
 			@feed = args[0]
 
 		elsif args.length == 1
