@@ -36,9 +36,9 @@ class Pants
 			fail "Malformed RSS feed"
 		end
 	end
-	
+
 	private
-	
+
 	def fail(text)
 		"<div class='feed-error'>#{text}</div>"
 	end
@@ -52,7 +52,7 @@ Pants::TMPL = <<EOT
 		<li>
 			<h3><a href="<%= item.link %>"><%= item.title %></a></h3>
 			<div class="date"><%= item.date %></div>
-			<p><%= item.description %></p>
+			<div class="desc"><%= item.description %></div>
 		</li><% end %>
 	</ul>
 </div>
