@@ -9,6 +9,9 @@ require "erb"
 
 
 class Pants
+	
+	# parse one or two command-line
+	# arguments, or quit with usage
 	def initialize(args, stdin)
 		if args.length == 2
 			@tmpl = IO.read(args[1])
@@ -24,8 +27,11 @@ class Pants
 		end
 	end
 
+	# fetch the feed over http, parse it,
+	# and generate the output with erb. if
+	# anything at all goes wrong, abort
 	def run
-		puts begin
+		begin
 			@xml = open(@uri){ |s| s.read }
 			@data = SimpleRSS.parse(@xml)
 			ERB.new(@tmpl).result(binding)
@@ -40,6 +46,9 @@ class Pants
 
 	private
 
+	# whether or not something goes wrong, the output of this program will
+	# probably be piped into a tmp file to be included in an HTML document;
+	# so include some HTML in the error, to hide (or highligh) it with CSS
 	def fail(doing, text)
 		"<div class='feed-error'>Error while #{doing} feed: <span>#{text}</span></div>"
 	end
