@@ -2,8 +2,9 @@
 # vim: noet
 
 
+require "rubygems"
 require "open-uri"
-require "rss"
+require "simple-rss"
 require "erb"
 
 
@@ -11,10 +12,10 @@ class Pants
 	def initialize(args, stdin)
 		if args.length == 2
 			@tmpl = IO.read(args[1])
-			@feed = args[0]
+			@uri = args[0]
 
 		elsif args.length == 1
-			@feed = args[0]
+			@uri = args[0]
 			@tmpl = TMPL
 
 		else
@@ -25,22 +26,22 @@ class Pants
 
 	def run
 		puts begin
-			@rss = open(@feed) { |s| s.read }
-			@data = RSS::Parser.parse(@rss)
+			@xml = open(@uri){ |s| s.read }
+			@data = SimpleRSS.parse(@xml)
 			ERB.new(@tmpl).result(binding)
 
 		rescue OpenURI::HTTPError => err
-			fail "Error fetching RSS feed"
+			fail "fetching", err
 
-		rescue RSS::NotWellFormedError
-			fail "Malformed RSS feed"
+		rescue SimpleRSSError => err
+			fail "parsing", err
 		end
 	end
 
 	private
 
-	def fail(text)
-		"<div class='feed-error'>#{text}</div>"
+	def fail(doing, text)
+		"<div class='feed-error'>Error while #{doing} feed: <span>#{text}</span></div>"
 	end
 end
 
@@ -57,6 +58,3 @@ Pants::TMPL = <<EOT
 	</ul>
 </div>
 EOT
-
-
-Pants.new(ARGV, STDIN).run

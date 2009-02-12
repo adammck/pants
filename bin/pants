@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+# vim: noet
+
+require File.expand_path(File.dirname(__FILE__) + "/../lib/pants.rb")
+Pants.new(ARGV, STDIN).run
