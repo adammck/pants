@@ -9,6 +9,7 @@ require "erb"
 
 
 class Pants
+	DATE_TAGS = [:pubDate, :published, :updated, :expirationDate, :modified]
 	
 	# parse one or two command-line
 	# arguments, or quit with usage
@@ -45,6 +46,16 @@ class Pants
 	end
 
 	private
+	
+	# returns the first date tag present in _item_,
+	# in the priority of DATE_TAGS (since in our default
+	# template, we're only (currently) using one of them)
+	def the_date(item)
+		DATE_TAGS.each do |tag|
+			return item[tag] if\
+				item.has_key?(tag)
+		end
+	end
 
 	# whether or not something goes wrong, the output of this program will
 	# probably be piped into a tmp file to be included in an HTML document;
@@ -61,7 +72,7 @@ Pants::TMPL = <<EOT
 	<ul><% @data.items.each do |item| %>
 		<li>
 			<h3><a href="<%= item.link %>"><%= item.title %></a></h3>
-			<div class="date"><%= item.date %></div>
+			<div class="date"><%= the_date(item) %></div>
 			<div class="desc"><%= item.description %></div>
 		</li><% end %>
 	</ul>
