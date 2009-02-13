@@ -31,7 +31,7 @@ class Pants
 	# and generate the output with erb. if
 	# anything at all goes wrong, abort
 	def run
-		begin
+		puts begin
 			@xml = open(@uri){ |s| s.read }
 			@data = SimpleRSS.parse(@xml)
 			ERB.new(@tmpl).result(binding)
